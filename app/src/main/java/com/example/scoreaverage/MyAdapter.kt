@@ -10,9 +10,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.cell_card.view.*
+import java.util.*
 
 class MyAdapter(var context: Context) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
-    private lateinit var allScore: List<Score>
+    private var allScore: List<Score> = ArrayList()
     private lateinit var scoreViewModel: ScoreViewModel
     lateinit var myOnItemChangedListener: OnItemChangedListener
 

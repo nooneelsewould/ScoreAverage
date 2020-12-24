@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.scoreaverage.MyAdapter.OnItemChangedListener
 import kotlinx.android.synthetic.main.fragment_score.*
 
 
@@ -30,9 +29,14 @@ class ScoreFragment : Fragment() {
 
     lateinit var scoreViewModel: ScoreViewModel
     lateinit var myAdapter: MyAdapter
-    private lateinit var allScore: List<Score>
+    private var allScore: List<Score> = ArrayList()
 
-    var scoreAverageResult: Double = 0.0
+    var scoreAverageResult = 0.0
+
+    private fun setAllScoreHere(allScore: List<Score>) {
+        this.allScore = allScore
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,23 +46,36 @@ class ScoreFragment : Fragment() {
         }
     }
 
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         scoreViewModel = ViewModelProvider(this)[ScoreViewModel::class.java]
 
-//        scoreAverage.text = scoreAverageResult.toString()
+        scoreAverage.text="点我计算"
+
+        scoreAverage.setOnClickListener(View.OnClickListener {
+            var scoreMultiplyCredit = 0.0
+            var creditSum = 0.0
+            for (item: Score in allScore) {
+                scoreMultiplyCredit += item.getScore().toDouble() * item.getCredit().toDouble()
+                creditSum += item.getCredit().toDouble()
+            }
+            scoreAverageResult = scoreMultiplyCredit / creditSum
+            scoreAverage.text = scoreAverageResult.toString()
+        })
+
         myAdapter = context?.let { MyAdapter(it) }!!
-        myAdapter.setOnItemChangedListener(object : OnItemChangedListener {
+        myAdapter.setOnItemChangedListener(object : MyAdapter.OnItemChangedListener {
             override fun onItemChanged() {
-//                var scoreMultiplyCredit: Double = 0.0
-//                var creditSum: Double = 0.0
-//                for (item: Score in scoreViewModel.getAllScoreLive().value!!) {
-//                    scoreMultiplyCredit += item.getScore().toDouble() * item.getCredit().toDouble()
-//                    creditSum += item.getCredit().toDouble()
-//                }
-//                scoreAverageResult = scoreMultiplyCredit / creditSum
-//                scoreAverage.text = scoreAverageResult.toString()
+                var scoreMultiplyCredit = 0.0
+                var creditSum = 0.0
+                for (item: Score in allScore) {
+                    scoreMultiplyCredit += item.getScore().toDouble() * item.getCredit().toDouble()
+                    creditSum += item.getCredit().toDouble()
+                }
+                scoreAverageResult = scoreMultiplyCredit / creditSum
+                scoreAverage.text = scoreAverageResult.toString()
             }
         })
 
@@ -69,6 +86,7 @@ class ScoreFragment : Fragment() {
             { t -> //设置数据源
                 if (t != null) {
                     myAdapter.setAllScore(t)
+                    setAllScoreHere(t)
                     myAdapter.notifyDataSetChanged()
                 }
             })
@@ -85,15 +103,6 @@ class ScoreFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-//        scoreViewModel = ViewModelProvider(this)[ScoreViewModel::class.java]
-//        var scoreMultiplyCredit = 0.0
-//        var creditSum = 0.0
-//        for (item: Score in scoreViewModel.getAllScoreLive().value!!) {
-//            scoreMultiplyCredit += item.getScore().toDouble() * item.getCredit().toDouble()
-//            creditSum += item.getCredit().toDouble()
-//        }
-//        scoreAverageResult = scoreMultiplyCredit / creditSum
-
         return inflater.inflate(R.layout.fragment_score, container, false)
     }
 
