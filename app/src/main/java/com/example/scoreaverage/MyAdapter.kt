@@ -1,14 +1,20 @@
 package com.example.scoreaverage
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.cell_card.view.*
 
-class MyAdapter : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
-    private var allScore: List<Score> = ArrayList()
+class MyAdapter(var context: Context) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+    private lateinit var allScore: List<Score>
+    private lateinit var scoreViewModel: ScoreViewModel
+    lateinit var myOnItemChangedListener: OnItemChangedListener
 
     fun setAllScore(allScore: List<Score>) {
         this.allScore = allScore
@@ -20,12 +26,14 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         var score: TextView = itemView.score
         var credit: TextView = itemView.credit
         var remark: TextView = itemView.remark
+        var remove: ImageButton = itemView.removeBtn
 
         init {
             course = itemView.course
             score = itemView.score
             credit = itemView.credit
             remark = itemView.remark
+            remove = itemView.removeBtn
         }
     }
 
@@ -37,6 +45,8 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         val layoutInflater = LayoutInflater.from(parent.context)
         val itemView: View
         itemView = layoutInflater.inflate(R.layout.cell_card, parent, false)
+
+        scoreViewModel = ViewModelProvider((context as FragmentActivity))[ScoreViewModel::class.java]
         return MyViewHolder(itemView)
     }
 
@@ -46,6 +56,20 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
         holder.score.text = score.getScore()
         holder.credit.text = score.getCredit()
         holder.remark.text = score.getRemark()
+
+        holder.remove.setOnClickListener {
+            scoreViewModel.deleteScore(allScore[holder.adapterPosition])
+            notifyDataSetChanged()
+            myOnItemChangedListener.onItemChanged()
+        }
+    }
+
+    interface OnItemChangedListener {
+        fun onItemChanged()
+    }
+
+    public fun setOnItemChangedListener(onItemChangedListener: OnItemChangedListener) {
+        myOnItemChangedListener = onItemChangedListener
     }
 
 }

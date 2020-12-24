@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.scoreaverage.MyAdapter.OnItemChangedListener
 import kotlinx.android.synthetic.main.fragment_score.*
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +30,9 @@ class ScoreFragment : Fragment() {
 
     lateinit var scoreViewModel: ScoreViewModel
     lateinit var myAdapter: MyAdapter
+    private lateinit var allScore: List<Score>
+
+    var scoreAverageResult: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +47,20 @@ class ScoreFragment : Fragment() {
 
         scoreViewModel = ViewModelProvider(this)[ScoreViewModel::class.java]
 
-
-        myAdapter = MyAdapter()
+//        scoreAverage.text = scoreAverageResult.toString()
+        myAdapter = context?.let { MyAdapter(it) }!!
+        myAdapter.setOnItemChangedListener(object : OnItemChangedListener {
+            override fun onItemChanged() {
+//                var scoreMultiplyCredit: Double = 0.0
+//                var creditSum: Double = 0.0
+//                for (item: Score in scoreViewModel.getAllScoreLive().value!!) {
+//                    scoreMultiplyCredit += item.getScore().toDouble() * item.getCredit().toDouble()
+//                    creditSum += item.getCredit().toDouble()
+//                }
+//                scoreAverageResult = scoreMultiplyCredit / creditSum
+//                scoreAverage.text = scoreAverageResult.toString()
+            }
+        })
 
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
         recyclerView.adapter = myAdapter
@@ -56,6 +73,7 @@ class ScoreFragment : Fragment() {
                 }
             })
 
+
         floatingActionButton.setOnClickListener(View.OnClickListener {
             val navController: NavController = Navigation.findNavController(it)
             navController.navigate(R.id.action_scoreFragment_to_addFragment)
@@ -67,6 +85,15 @@ class ScoreFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+//        scoreViewModel = ViewModelProvider(this)[ScoreViewModel::class.java]
+//        var scoreMultiplyCredit = 0.0
+//        var creditSum = 0.0
+//        for (item: Score in scoreViewModel.getAllScoreLive().value!!) {
+//            scoreMultiplyCredit += item.getScore().toDouble() * item.getCredit().toDouble()
+//            creditSum += item.getCredit().toDouble()
+//        }
+//        scoreAverageResult = scoreMultiplyCredit / creditSum
+
         return inflater.inflate(R.layout.fragment_score, container, false)
     }
 
