@@ -4,20 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp"
-    android:layout_marginBottom="10dp"
     android:layout_marginStart="20dp"
+    android:layout_marginTop="10dp"
     android:layout_marginEnd="20dp"
+    android:layout_marginBottom="10dp"
+    android:background="@android:drawable/list_selector_background"
     android:orientation="vertical">
+
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:cardCornerRadius="10dp">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/selector">
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline2"
@@ -58,11 +62,12 @@
                 android:id="@+id/course"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:lines="1"
                 android:text="TextView"
-                android:textSize="30sp"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/score"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                app:layout_constraintStart_toStartOf="@+id/guideline5"
+                app:layout_constraintStart_toStartOf="@+id/guideline3"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="高等数学" />
 
@@ -70,6 +75,7 @@
                 android:id="@+id/score"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:lines="1"
                 android:text="TextView"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -85,6 +91,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
+                android:lines="1"
                 android:text="TextView"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -99,6 +106,7 @@
                 android:id="@+id/remark"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:lines="1"
                 android:text="TextView"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -107,31 +115,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/score" />
 
             <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:text="科目："
-                android:textSize="30sp"
-                app:layout_constraintBottom_toTopOf="@+id/score"
-                app:layout_constraintEnd_toStartOf="@+id/course"
-                app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:text="成绩："
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/score"
                 app:layout_constraintEnd_toStartOf="@+id/guideline5"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toBottomOf="@+id/textView"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintStart_toStartOf="@+id/guideline3" />
 
             <TextView
                 android:id="@+id/textView3"
