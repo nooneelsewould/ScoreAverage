@@ -5,6 +5,10 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#121212"
+    android:backgroundTint="#121212"
+    android:scrollbarThumbHorizontal="@android:drawable/screen_background_dark"
+    android:scrollbarThumbVertical="@android:drawable/screen_background_dark"
     tools:context=".AddFragment">
 
 
@@ -126,7 +130,7 @@
         android:layout_marginStart="64dp"
         android:layout_marginEnd="64dp"
         android:layout_marginBottom="100dp"
-        android:text="添加"
+        android:text="Add"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline4"
