@@ -21,6 +21,10 @@ class MyAdapter(var context: Context) : RecyclerView.Adapter<MyAdapter.MyViewHol
         this.allScore = allScore
     }
 
+    fun getAllScore(): List<Score> {
+        return allScore
+    }
+
     //内部类
     class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var course: TextView = itemView.course

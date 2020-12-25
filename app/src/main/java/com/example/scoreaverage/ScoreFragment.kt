@@ -8,8 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_score.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -38,6 +42,7 @@ class ScoreFragment : Fragment() {
     }
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -52,7 +57,7 @@ class ScoreFragment : Fragment() {
 
         scoreViewModel = ViewModelProvider(this)[ScoreViewModel::class.java]
 
-        scoreAverage.text="查看"
+        scoreAverage.text = "查看"
 
         scoreAverage.setOnClickListener(View.OnClickListener {
             var scoreMultiplyCredit = 0.0
@@ -76,7 +81,7 @@ class ScoreFragment : Fragment() {
                 }
                 scoreAverageResult = scoreMultiplyCredit / creditSum
                 scoreAverage.text = scoreAverageResult.toString()
-                scoreAverage.text="查看"
+                scoreAverage.text = "查看"
             }
         })
 
@@ -97,6 +102,70 @@ class ScoreFragment : Fragment() {
             val navController: NavController = Navigation.findNavController(it)
             navController.navigate(R.id.action_scoreFragment_to_addFragment)
         })
+
+
+        val helper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
+            override fun getMovementFlags(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ): Int {
+                var dragFlag = 0
+                dragFlag = ItemTouchHelper.UP or ItemTouchHelper.DOWN
+                return makeMovementFlags(dragFlag, 0)
+            }
+
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                //得到当拖拽的viewHolder的Position
+                val fromPosition = viewHolder.adapterPosition
+                //拿到当前拖拽到的item的viewHolder
+                val toPosition = target.adapterPosition
+                if (fromPosition < toPosition) {
+                    for (i in fromPosition until toPosition) {
+                        Collections.swap(myAdapter.getAllScore(), i, i + 1)
+                        val temp: Score = allScore[fromPosition]
+                        allScore[fromPosition].setCourse(allScore[toPosition].getCourse())
+                        allScore[fromPosition].setScore(allScore[toPosition].getScore())
+                        allScore[fromPosition].setCredit(allScore[toPosition].getCredit())
+                        allScore[fromPosition].setRemark(allScore[toPosition].getRemark())
+
+                        allScore[toPosition].setCourse(temp.getCourse())
+                        allScore[toPosition].setScore(temp.getScore())
+                        allScore[toPosition].setCredit(temp.getCredit())
+                        allScore[toPosition].setRemark(temp.getRemark())
+
+                    }
+                } else {
+                    for (i in fromPosition downTo toPosition + 1) {
+                        Collections.swap(myAdapter.getAllScore(), i, i - 1)
+                        val temp: Score = allScore[fromPosition]
+                        allScore[fromPosition].setCourse(allScore[toPosition].getCourse())
+                        allScore[fromPosition].setScore(allScore[toPosition].getScore())
+                        allScore[fromPosition].setCredit(allScore[toPosition].getCredit())
+                        allScore[fromPosition].setRemark(allScore[toPosition].getRemark())
+
+                        allScore[toPosition].setCourse(temp.getCourse())
+                        allScore[toPosition].setScore(temp.getScore())
+                        allScore[toPosition].setCredit(temp.getCredit())
+                        allScore[toPosition].setRemark(temp.getRemark())
+                    }
+                }
+                myAdapter.notifyItemMoved(fromPosition, toPosition)
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                //侧滑删除可以使用；
+            }
+
+            override fun isLongPressDragEnabled(): Boolean {
+                return true
+            }
+        })
+        helper.attachToRecyclerView(recyclerView)
     }
 
     override fun onCreateView(
