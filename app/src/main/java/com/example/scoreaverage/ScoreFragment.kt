@@ -58,6 +58,7 @@ class ScoreFragment : Fragment() {
         scoreViewModel = ViewModelProvider(this)[ScoreViewModel::class.java]
 
         scoreAverage.text = "查看"
+        creditSumText.text = ""
 
         scoreAverage.setOnClickListener(View.OnClickListener {
             var scoreMultiplyCredit = 0.0
@@ -68,6 +69,7 @@ class ScoreFragment : Fragment() {
             }
             scoreAverageResult = scoreMultiplyCredit / creditSum
             scoreAverage.text = scoreAverageResult.toString()
+            creditSumText.text = creditSum.toString()
         })
 
         myAdapter = context?.let { MyAdapter(it) }!!
@@ -81,7 +83,10 @@ class ScoreFragment : Fragment() {
                 }
                 scoreAverageResult = scoreMultiplyCredit / creditSum
                 scoreAverage.text = scoreAverageResult.toString()
+                creditSumText.text = creditSum.toString()
                 scoreAverage.text = "查看"
+                creditSumText.text = "查看"
+
             }
         })
 
