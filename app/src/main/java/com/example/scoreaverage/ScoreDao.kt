@@ -11,6 +11,9 @@ interface ScoreDao {
     @Update
     fun updateScore(vararg score: Score?)
 
+    @Query("select * from SCORE")
+    fun loadAllNotes(): List<Score>
+
     @Delete
     fun deleteScore(vararg score: Score?)
 

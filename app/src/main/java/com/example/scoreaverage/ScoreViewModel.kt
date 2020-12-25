@@ -16,6 +16,10 @@ class ScoreViewModel(application: Application) : AndroidViewModel(application) {
         scoreRepository.insertScore(*params)
     }
 
+    fun updateScore(vararg params: Score?){
+        scoreRepository.updateScore(*params)
+    }
+
     fun deleteScore(vararg params: Score?){
         scoreRepository.deleteScore(*params)
     }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_score.*
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.concurrent.thread
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -40,7 +41,6 @@ class ScoreFragment : Fragment() {
     private fun setAllScoreHere(allScore: List<Score>) {
         this.allScore = allScore
     }
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -123,36 +123,32 @@ class ScoreFragment : Fragment() {
                 val fromPosition = viewHolder.adapterPosition
                 //拿到当前拖拽到的item的viewHolder
                 val toPosition = target.adapterPosition
+
+                val scoreDao = ScoreDatabase.getDatabase(context!!)?.getScoreDao()
+
                 if (fromPosition < toPosition) {
                     for (i in fromPosition until toPosition) {
                         Collections.swap(myAdapter.getAllScore(), i, i + 1)
-                        val temp: Score = allScore[fromPosition]
-                        allScore[fromPosition].setCourse(allScore[toPosition].getCourse())
-                        allScore[fromPosition].setScore(allScore[toPosition].getScore())
-                        allScore[fromPosition].setCredit(allScore[toPosition].getCredit())
-                        allScore[fromPosition].setRemark(allScore[toPosition].getRemark())
-
-                        allScore[toPosition].setCourse(temp.getCourse())
-                        allScore[toPosition].setScore(temp.getScore())
-                        allScore[toPosition].setCredit(temp.getCredit())
-                        allScore[toPosition].setRemark(temp.getRemark())
-
                     }
                 } else {
                     for (i in fromPosition downTo toPosition + 1) {
                         Collections.swap(myAdapter.getAllScore(), i, i - 1)
-                        val temp: Score = allScore[fromPosition]
-                        allScore[fromPosition].setCourse(allScore[toPosition].getCourse())
-                        allScore[fromPosition].setScore(allScore[toPosition].getScore())
-                        allScore[fromPosition].setCredit(allScore[toPosition].getCredit())
-                        allScore[fromPosition].setRemark(allScore[toPosition].getRemark())
-
-                        allScore[toPosition].setCourse(temp.getCourse())
-                        allScore[toPosition].setScore(temp.getScore())
-                        allScore[toPosition].setCredit(temp.getCredit())
-                        allScore[toPosition].setRemark(temp.getRemark())
                     }
                 }
+
+                thread {
+                    val tempList = scoreDao?.loadAllNotes()?.toMutableList()
+                    if (tempList != null) {
+                        for (i in 0 until tempList.size) {
+                            tempList[i].setCourse(allScore[i].getCourse())
+                            tempList[i]?.setScore(allScore[i].getScore())
+                            tempList[i]?.setCredit(allScore[i].getCourse())
+                            tempList[i]?.setRemark(allScore[i].getRemark())
+                            scoreDao?.updateScore(tempList?.get(i))
+                        }
+                    }
+                }
+
                 myAdapter.notifyItemMoved(fromPosition, toPosition)
                 return true
             }
@@ -166,6 +162,7 @@ class ScoreFragment : Fragment() {
             }
         })
         helper.attachToRecyclerView(recyclerView)
+
     }
 
     override fun onCreateView(

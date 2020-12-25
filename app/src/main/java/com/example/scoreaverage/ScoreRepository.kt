@@ -23,6 +23,10 @@ class ScoreRepository(context: Context) {
         DeleteAsyncTask(scoreDao).execute(*params)
     }
 
+    fun updateScore(vararg params: Score?) {
+        UpdateAsyncTask(scoreDao).execute(*params)
+    }
+
     fun getAllScoreLive(): LiveData<List<Score>> {
         return allScoreLive
     }
@@ -38,6 +42,13 @@ class ScoreRepository(context: Context) {
         //在后台工作
         override fun doInBackground(vararg params: Score?) {
             scoreDao.deleteScore(*params)
+        }
+    }
+
+    internal class UpdateAsyncTask(private val scoreDao: ScoreDao) : AsyncTask<Score?, Unit, Unit>() {
+        //在后台工作
+        override fun doInBackground(vararg params: Score?) {
+            scoreDao.updateScore(*params)
         }
     }
 }
